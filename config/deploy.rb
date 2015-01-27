@@ -67,6 +67,6 @@ namespace :deploy do
     run "ln -nfs #{shared_path}/config/initializers/devise.rb #{release_path}/config/initializers/devise.rb"
     run "ln -nfs #{shared_path}/config/secrets.yml #{release_path}/config/secrets.yml"
   end
-  after 'deploy:update_code', 'deploy:symlink_shared'
+  after 'deploy:finishing', 'deploy:symlink_shared'
   
 end
