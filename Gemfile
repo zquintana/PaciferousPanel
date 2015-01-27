@@ -61,3 +61,7 @@ gem 'capistrano-bundler'
 
 # if you are using RBENV
 gem 'capistrano-rbenv', "~> 2.0" 
+
+group :production do
+  gem 'mysql2'  
+end

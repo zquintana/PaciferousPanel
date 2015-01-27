@@ -1,14 +1,14 @@
 # config valid only for Capistrano 3.1
 lock '3.1.0'
 
-set :application, 'my_app_name'
-set :repo_url, 'git@example.com:me/my_repo.git'
+set :application, 'paciferous_panel'
+set :repo_url, 'git@github.com:zquintana/PaciferousPanel.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-# set :deploy_to, '/var/www/my_app'
+set :deploy_to, '/home/zach/www/panel.vectorw3b.com'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -23,7 +23,7 @@ set :repo_url, 'git@example.com:me/my_repo.git'
 # set :pty, true
 
 # Default value for :linked_files is []
-# set :linked_files, %w{config/database.yml}
+set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
@@ -33,6 +33,12 @@ set :repo_url, 'git@example.com:me/my_repo.git'
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+# setup rvm.
+set :rbenv_type, :user
+set :rbenv_ruby, '2.1.1'
+set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
+set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
 namespace :deploy do
 
@@ -55,4 +61,12 @@ namespace :deploy do
     end
   end
 
+
+  desc "Symlink shared configs and folders on each release."
+  task :symlink_shared do
+    run "ln -nfs #{shared_path}/config/initializers/devise.rb #{release_path}/config/initializers/devise.rb"
+    run "ln -nfs #{shared_path}/config/secrets.yml #{release_path}/config/secrets.yml"
+  end
+  after 'deploy:update_code', 'deploy:symlink_shared'
+  
 end
