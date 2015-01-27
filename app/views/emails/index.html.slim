@@ -1,0 +1,49 @@
+- content_for :sidebar do
+  == render "sidenav"
+
+
+h2 
+  | Emails
+  .right
+    = link_to raw('<span class="fi-plus"></span>Add Email'), new_domain_email_path, class: 'button small'
+
+table.full-width
+  thead
+    tr
+      th Email
+      th Domain
+      th
+
+  tbody
+    - @emails.each do |email|
+      tr
+        td = email.email
+        td = email.domain_id
+        td 
+          = link_to raw('<span class="fi-magnifying-glass"></span>Show'), email, class: 'button tiny sencondary'
+          = link_to raw('<span class="fi-wrench"></span>Edit'), edit_domain_email_path(email), class: "button tiny"
+          = link_to raw('<span class="fi-trash"></span>Destroy'), email, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "button tiny alert"
+
+
+h2 
+  | Email Aliases
+  .right
+    = link_to raw('<span class="fi-plus"></span>Add Alias'), new_domain_email_alias_path, class: 'button small'
+
+table.full-width
+  thead
+    tr
+      th Domain
+      th Source
+      th colspan="2" Destination
+
+  tbody
+    - @email_aliases.each do |email_alias|
+      tr
+        td = email_alias.domain_id
+        td = email_alias.source
+        td = email_alias.destination
+        td 
+          = link_to raw('<span class="fi-magnifying-glass"></span>Show'), email_alias, class: 'button tiny sencondary'
+          = link_to raw('<span class="fi-wrench"></span>Edit'), edit_email_domain_alias_path(email_alias), class: "button tiny"
+          = link_to raw('<span class="fi-trash"></span>Destroy'), email_alias, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "button tiny alert"

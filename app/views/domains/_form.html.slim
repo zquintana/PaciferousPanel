@@ -1,0 +1,32 @@
+= form_for @domain do |f|
+  - if @domain.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@domain.errors.count, "error")} prohibited this domain from being saved:"
+      ul
+        - @domain.errors.full_messages.each do |message|
+          li = message
+
+  .row
+    .large-6.columns.field
+      = f.label :name
+      = f.text_field :name
+    .large-6.columns.field
+      = f.label :alias
+      = f.text_field :alias
+  .row
+    .large-4.columns.field
+      = f.label :ip_id
+      = f.collection_select :ip_id, Ip.all, :id, :address
+    - if current_user.is_admin?
+      .large-4.columns.field
+        = f.label :user_id
+        = f.collection_select :user_id, User.all, :id, :email
+      .large-4.columns.field
+        = f.label :status
+        = f.select :status, Domain.StatusTypes.map{ |k,v| [k.to_s, v] }
+
+  .actions 
+    a href="#{ domains_path }" class="button secondary"
+      span class="fi-prohibited"
+      | Cancel
+    = f.button raw('<span class="fi-save"></span>Save'), class: 'button', type: 'submit'

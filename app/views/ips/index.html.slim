@@ -1,0 +1,23 @@
+- content_for :sidebar do
+  == render 'shared/admin_sidenav'
+
+h1 
+  | IP Addresses
+  .right
+    = link_to raw('<span class="fi-plus"></span>Add IP Address'), new_ip_path, class: 'button small'
+
+table.full-width
+  thead
+    tr
+      th Address
+      th
+
+  tbody
+    - @ips.each do |ip|
+      tr
+        td = ip.address
+        td 
+          / = link_to raw('<span class="fi-magnifying-glass"></span>Show'), ip, class: 'button tiny secondary'
+          = link_to raw('<span class="fi-wrench"></span>Edit'), edit_ip_path(ip), class: 'button tiny'
+          = link_to raw('<span class="fi-trash"></span>Destroy'), ip, data: {:confirm => 'Are you sure?'}, :method => :delete, class: 'button tiny alert'
+

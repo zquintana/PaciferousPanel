@@ -1,0 +1,24 @@
+- content_for :sidebar do
+  == render 'sidenav'
+
+
+= form_for [:domain, @email_alias] do |f|
+  - if @email_alias.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@email_alias.errors.count, "error")} prohibited this email_alias from being saved:"
+      ul
+        - @email_alias.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :source
+    = f.text_field :source
+  .field
+    = f.label :destination
+    = f.text_field :destination
+
+  .actions 
+    a href="#{ domain_emails_path }" class="button secondary"
+      span class="fi-prohibited"
+      | Cancel
+    = f.button icon_text('save', 'Save'), class: 'button', type: 'submit'

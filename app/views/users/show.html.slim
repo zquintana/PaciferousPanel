@@ -1,0 +1,15 @@
+- content_for :sidebar do
+  == render 'shared/admin_sidenav'
+
+p#notice = notice
+
+p
+  strong Email:
+  = @user.email
+p
+  strong Is admin:
+  = @user.is_admin
+
+= link_to 'Edit', edit_user_path(@user)
+'|
+= link_to 'Back', users_path

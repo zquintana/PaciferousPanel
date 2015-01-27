@@ -1,0 +1,29 @@
+- content_for :sidebar do
+  == render 'sidenav'
+
+
+h1 Email Aliases
+
+table.full-width
+  thead
+    tr
+      th Domain
+      th Source
+      th Destination
+      th
+      th
+      th
+
+  tbody
+    - @email_aliases.each do |email_alias|
+      tr
+        td = email_alias.domain_id
+        td = email_alias.source
+        td = email_alias.destination
+        td = link_to 'Show', email_alias
+        td = link_to 'Edit', edit_email_alias_path(email_alias)
+        td = link_to 'Destroy', email_alias, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Email alias', new_email_alias_path

@@ -1,0 +1,22 @@
+- content_for :sidebar do
+  == render 'shared/admin_sidenav'
+
+h1 
+  | Users
+  .right
+    = link_to raw('<span class="fi-plus"></span>Add User'), new_user_path, class: 'button small'
+
+table.full-width
+  thead
+    tr
+      th Email
+      th colspan="2" Is admin
+
+  tbody
+    - @users.each do |user|
+      tr
+        td = user.email
+        td = user.is_admin? ? 'Yes' : 'No'
+        td 
+          = link_to raw('<span class="fi-wrench"></span>Edit'), edit_user_path(user), class: "button tiny"
+          = link_to raw('<span class="fi-trash"></span>Destroy'), user, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "button tiny alert"

@@ -1,0 +1,12 @@
+- content_for :sidebar do
+  == render 'shared/admin_sidenav'
+
+p#notice = notice
+
+p
+  strong Address:
+  = @ip.address
+
+= link_to 'Edit', edit_ip_path(@ip)
+'|
+= link_to 'Back', ips_path

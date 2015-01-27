@@ -1,0 +1,31 @@
+<VirtualHost <%= @ip %>:443>
+  SSLEngine On
+  # SSLCertificateFile <%= @vhost_root %>/<%= @server_name %>/etc/ssl/certs/apache.pem
+  SSLCertificateFile <%= @vhost_root %>/<%= @server_name %>/etc/ssl/certs/3f73f0eb59ec2.crt
+  SSLCertificateKeyFile <%= @vhost_root %>/<%= @server_name %>/etc/ssl/certs/apache.key
+  SSLCACertificateFile <%= @vhost_root %>/<%= @server_name %>/etc/ssl/certs/sf_bundle-g2-g1.crt
+  # SSLCACertificateFile <%= @vhost_root %>/<%= @server_name %>/etc/ssl/certs/3f73f0eb59ec2.crt
+
+  # Admin email, Server Name (domain name), and any aliases
+  ServerAdmin <%= @server_admin %>
+  ServerName  <%= @server_name %>
+  <% if @server_alias %>
+  ServerAlias <%= @server_alias %>
+  <% end %>
+
+  # Index file and Document Root (where the www files are located)
+  DirectoryIndex index.html index.php
+  DocumentRoot <%= @vhost_root %>/<%= @server_name %>/web
+  <Directory <%= @vhost_root %>/<%= @server_name %>/web>
+    Options Indexes FollowSymLinks MultiViews
+    AllowOverride All
+    Require all granted
+  </Directory>
+
+
+  # Log file locations
+  LogLevel warn
+  ErrorLog  <%= @vhost_root %>/<%= @server_name %>/log/error.log
+  CustomLog <%= @vhost_root %>/<%= @server_name %>/log/access.log combined
+  php_value error_log <%= @vhost_root %>/<%= @server_name %>/log/error.log
+</VirtualHost>

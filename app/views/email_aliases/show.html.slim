@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Domain:
+  = @email_alias.domain_id
+p
+  strong Source:
+  = @email_alias.source
+p
+  strong Destination:
+  = @email_alias.destination
+
+= link_to 'Edit', edit_email_alias_path(@email_alias)
+'|
+= link_to 'Back', email_aliases_path

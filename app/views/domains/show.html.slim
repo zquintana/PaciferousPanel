@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @domain.name
+p
+  strong Alias:
+  = @domain.alias
+p
+  strong User:
+  = @domain.user_id
+p
+  strong Status:
+  = @domain.status
+p
+  strong Ip:
+  = @domain.ip_id
+
+= link_to 'Edit', edit_domain_path(@domain)
+'|
+= link_to 'Back', domains_path

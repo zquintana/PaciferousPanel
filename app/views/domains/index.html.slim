@@ -1,0 +1,45 @@
+- content_for :sidebar do
+  == render "sidenav"
+
+h1 
+  | Domains
+  .right
+    = link_to raw('<span class="fi-plus"></span>Add Domain'), new_domain_path, class: 'button small'
+
+
+#domains-cont
+  - @domains.each do |domain|
+    .domain
+      .row
+        .info.large-10.columns
+          .name 
+            span Domain: 
+            | #{domain.name}
+          .alias
+            span Alias: 
+            | #{domain.alias}
+          .status 
+            span Status: 
+            - if domain.status == Domain.StatusTypes[:disabled]
+              span.alert.label 
+                span.fa.fa-warning
+                |  disabled
+            - elsif domain.status == Domain.StatusTypes[:pending]
+              span.warning.label 
+                span.fa.fa-circle-o-notch.fa-spin
+                |  pending
+            - elsif domain.status == Domain.StatusTypes[:enabled]
+              span.success.label 
+                span.fa.fa-thumbs-o-up
+                |  enabled
+            - else
+              span.alert.label 
+                span.fa.fa-warning
+                |  unknown
+        .actions.large-2.columns
+          ul.stack.button-group
+            / li = link_to fa_icon('edit', 'Select'), domain_dash_path(domain.id), class: 'button tiny'
+            li = link_to raw('<span class="fi-wrench"></span>Edit'), edit_domain_path(domain), class: "button tiny"
+            li = link_to fa_icon('envelope', 'Email'), domain_emails_path(domain), class: 'button tiny'
+            li = link_to raw('<span class="fi-trash"></span>Destroy'), domain, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "button tiny alert"
+

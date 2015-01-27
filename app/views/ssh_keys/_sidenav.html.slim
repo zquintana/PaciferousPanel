@@ -1,0 +1,6 @@
+.panel.radius
+  h3 Navigation
+  ul.side-nav
+    li= link_to fa_stack('home', 'square', 'Home'), root_url
+    li= link_to fa_stack('list', 'square', 'SSH Keys'), ssh_keys_path
+    li= link_to fa_stack('plus', 'square', 'Add Key'), new_ssh_key_path

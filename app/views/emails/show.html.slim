@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Domain:
+  = @email.domain_id
+p
+  strong Password:
+  = @email.password
+p
+  strong Email:
+  = @email.email
+
+= link_to 'Edit', edit_email_path(@email)
+'|
+= link_to 'Back', emails_path

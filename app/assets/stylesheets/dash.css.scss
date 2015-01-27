@@ -1,0 +1,73 @@
+// Place all the styles related to the dash controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+@import "compass/utilities/sprites";
+@import "dash-icons/*.png";
+
+@include all-dash-icons-sprites;
+
+.dash-icons-sprite {
+	width: 96px;
+	height: 96px;
+	background-size: 100%;
+
+	display: inline-block;
+}
+
+.apps {
+	margin-top: 40px;
+	li {
+		text-align: center;
+		a {
+			display: block;
+		}
+	}
+	.link {
+		font-size: 1.25em;
+		font-weight: bold;
+	}
+}
+
+html.dash, html.domains {
+	#domains-cont {
+		.domain {
+			background: $panel-bg;
+			border-style: $panel-border-style;
+			border-width: $panel-border-size;
+			border-color: $panel-border-color;
+			border-radius: 4px;
+			padding: 5px 10px 10px;
+			margin-bottom: 15px;
+
+			hr {
+				margin: 5px 0 7px;
+			}
+
+			.info {
+				font-size: 0.8em;
+
+				& > div {
+					padding: 4px 0;
+					border-bottom: 1px solid white;
+
+					&:last-of-type {
+						border-bottom: none;
+						padding-bottom: 0;
+					}
+
+					& > span {
+						font-weight: bold;
+						display: inline-block;
+						margin-right: 8px;
+						width: 80px;
+						text-align: right;
+						&.label {
+							width: inherit;
+						}
+					}
+				}
+			}
+		}
+	}
+}

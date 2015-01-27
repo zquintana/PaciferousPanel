@@ -1,0 +1,21 @@
+h1 Dash
+
+.apps
+	ul.large-block-grid-4
+		li
+			a href="#{ domains_path }"
+				div
+					span.dash-icons-sprite.dash-icons-browser
+				span.link Domains
+		li
+			a href="#{ ssh_keys_path }"
+				div 
+					span.dash-icons-sprite.dash-icons-terminal
+				span.link SSH Keys
+
+		li
+			a href="#{ domain_emails_path(@domain) }"
+				div
+					span.dash-icons-sprite.dash-icons-mail
+				span.link Email
+				

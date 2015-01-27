@@ -1,0 +1,12 @@
+p#notice = notice
+
+p
+  strong User:
+  = @ssh_key.user_id
+p
+  strong Key:
+  = @ssh_key.key
+
+= link_to 'Edit', edit_ssh_key_path(@ssh_key)
+'|
+= link_to 'Back', ssh_keys_path

@@ -1,0 +1,21 @@
+- content_for :sidebar do
+  == render('sidenav')
+
+h1 
+  | SSH Keys
+  .right
+    = link_to raw('<span class="fi-plus"></span>Add Key'), new_ssh_key_path, class: 'button small'
+
+table.full-width
+  thead
+    tr
+      th Description
+      th
+
+  tbody
+    - @ssh_keys.each do |ssh_key|
+      tr
+        td = ssh_key.descrip
+        td
+          = link_to raw('<span class="fi-wrench"></span>Edit'), edit_ssh_key_path(ssh_key), class: 'button tiny'
+          = link_to raw('<span class="fi-trash"></span>Destroy'), ssh_key, data: {:confirm => 'Are you sure?'}, :method => :delete, class: 'button tiny alert'

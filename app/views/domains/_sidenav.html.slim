@@ -1,0 +1,8 @@
+.panel.radius
+  h3 Navigation
+  ul.side-nav
+    li= link_to fa_stack('home', 'square', 'Home'), root_url
+    / li= link_to fa_stack('cloud', 'square', 'Domains'), domains_path
+    li= link_to fa_stack('plus', 'square', 'Add Domain'), new_domain_path
+    li.divider
+    li= link_to fa_stack('terminal', 'square', 'SSH Keys'), ssh_keys_path

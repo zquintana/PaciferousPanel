@@ -1,0 +1,11 @@
+doctype html
+html class="#{params['controller']} #{params['action']}"
+	head
+		title PaciferousPanel
+  		== stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+  		== javascript_include_tag 'application', 'data-turbolinks-track' => true 
+  		== csrf_meta_tags
+  	body.uk-height-1-1
+  		.uk-vertical-align.uk-text-center.uk-height-1-1
+        #main-content.uk-vertical-align-middle
+				  == yield

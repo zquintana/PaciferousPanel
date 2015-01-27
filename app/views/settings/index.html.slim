@@ -1,0 +1,25 @@
+- content_for :sidebar do
+  == render "sidenav"
+
+h1 
+  | Listing settings
+  .right
+    = link_to raw('<span class="fi-plus"></span>Add Setting'), new_setting_path, class: 'button small'
+
+table.full-width
+  thead
+    tr
+      th Name
+      th Value
+      th Type
+      th
+
+  tbody
+    - @settings.each do |setting|
+      tr
+        td = setting.name
+        td = setting.casted_value
+        td = setting.stype
+        td
+          = link_to icon_text('pencil', 'Edit'), edit_setting_path(setting), class: 'button tiny'
+          = link_to icon_text('trash', 'Destroy'), setting, data: {:confirm => 'Are you sure?'}, :method => :delete,  class: 'button tiny alert'

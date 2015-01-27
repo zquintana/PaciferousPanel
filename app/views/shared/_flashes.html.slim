@@ -1,0 +1,7 @@
+/! flashes
+- flash.each do |name, msg|
+	- next if name == 'timedout'
+	
+	div class="alert-box #{name}" data-alert=""
+		= msg
+		a href="#" class="close" &times;

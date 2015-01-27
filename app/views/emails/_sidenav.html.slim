@@ -1,0 +1,7 @@
+.panel.radius
+  h3 Navigation
+  ul.side-nav
+    li= link_to fa_stack('home', 'square', 'Home'), root_url
+    li= link_to fa_stack("envelope", 'square', "Emails"), domain_emails_path
+    li= link_to fa_stack('plus', 'square', 'Add Email'), new_domain_email_path
+    li= link_to fa_stack('user', 'square', 'Add Alias'), new_domain_email_alias_path

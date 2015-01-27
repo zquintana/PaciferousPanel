@@ -1,0 +1,25 @@
+= form_for @setting do |f|
+  - if @setting.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@setting.errors.count, "error")} prohibited this setting from being saved:"
+      ul
+        - @setting.errors.full_messages.each do |message|
+          li = message
+
+  .row
+    .large-6.columns
+      .field
+        = f.label :name
+        = f.text_field :name
+    .large-6.columns
+      .field
+        = f.label :var_type
+        = f.select :var_type, options_for_select(Setting.VarTypes)
+  .field
+    = f.label :value
+    = f.text_area :value
+  .actions 
+    a href="#{ settings_url }" class="button secondary"
+      span class="fi-prohibited"
+      | Cancel
+    = f.button raw('<span class="fi-save"></span>Save'), class: 'button', type: 'submit'
