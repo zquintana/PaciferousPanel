@@ -69,7 +69,7 @@ namespace :deploy do
   task :stop do
     on roles(:app) do
       within current_path do
-        execute  :passenger, "stop  --port 8080"
+        execute  :passenger, "stop --port 8080"
       end
     end
   end

@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, 
          :confirmable, :lockable, :timeoutable
-  before_create :create_unix_user
+  after_create :create_unix_user
   # before_create :before_create_set_pending
 
 
