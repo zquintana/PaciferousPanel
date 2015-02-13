@@ -4,8 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, 
          :confirmable, :lockable, :timeoutable
-  # before_create :create_unix_user
-  before_create :before_create_set_pending
+  before_create :create_unix_user
+  # before_create :before_create_set_pending
 
 
   has_many :domains
@@ -22,6 +22,10 @@ class User < ActiveRecord::Base
 
   def is_admin?
   	read_attribute(:is_admin) == true
+  end
+
+  def unix_alias
+    "client#{id}"
   end
 
   class << self
@@ -46,11 +50,14 @@ class User < ActiveRecord::Base
     def create_unix_user
       default_shell = Setting.get('default_shell')
       debug = Setting.get('debug')
-      return if debug == true
+      if debug == true
+        write_attribute(:status, 1)
+        return self.save
+      end
 
-      command = "useradd -p #{self.password.crypt('JU')} -m"
+      command = "useradd -m"
       command += " -s #{default_shell}" if default_shell
-      command += " #{self.alias}"
+      command += " #{self.unix_alias}"
 
       `#{command}`
     end

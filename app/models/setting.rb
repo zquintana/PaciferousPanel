@@ -8,6 +8,7 @@ class Setting < ActiveRecord::Base
 
 
 	def stype
+		return 'nil' if self.var_type.nil?
 		@@VarTypes[self.var_type][0]
 	end
 
@@ -22,20 +23,24 @@ class Setting < ActiveRecord::Base
 	end
 
 	def after_save_cache
-		self.class.save_all
+		self.class.update_cache
 	end
 
 	class << self
-		def get(name)
+		def get(name, default=nil)
 			record = self.get_cached[name]
-			record ? record.casted_value : nil
+			record ? record.casted_value : default
+		end
+
+		def add(name, value, type=STRING_TYPE)
+			self.create(name: name, value: value, var_type: type)
 		end
 
 		def VarTypes
 			@@VarTypes
 		end
 
-		def save_all
+		def update_cache
 			save = {}
 
 			self.all.each do |setting|
@@ -47,7 +52,7 @@ class Setting < ActiveRecord::Base
 		end
 
 		def get_cached
-			return self.save_all if !Rails.cache.exist? 'settings'
+			return self.update_cache if !Rails.cache.exist? 'settings'
 
 			return Rails.cache.read 'settings'
 		end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150126235252) do
+ActiveRecord::Schema.define(version: 20150131203124) do
 
   create_table "domains", force: true do |t|
     t.string   "name"
@@ -64,6 +64,8 @@ ActiveRecord::Schema.define(version: 20150126235252) do
     t.datetime "updated_at"
     t.integer  "var_type",   default: 0
   end
+
+  add_index "settings", ["name"], name: "index_settings_on_name", unique: true
 
   create_table "ssh_keys", force: true do |t|
     t.integer  "user_id"

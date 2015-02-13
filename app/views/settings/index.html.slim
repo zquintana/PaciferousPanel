@@ -3,23 +3,41 @@
 
 h1 
   | Listing settings
-  .right
-    = link_to raw('<span class="fi-plus"></span>Add Setting'), new_setting_path, class: 'button small'
+  
+= form_tag settings_path, method: 'PUT'
+  fieldset
+    legend Apache Settings
 
-table.full-width
-  thead
-    tr
-      th Name
-      th Value
-      th Type
-      th
+    .row
+      .large-6.columns
+        label for="setting_virtual_hosts_path" Virtual Hosts Path
+        input type="text" id="setting_virtual_hosts_path" name="setting[virtual_hosts_path]" value="#{Setting.get('virtual_hosts_path')}"
+      
+    .row
+      .large-6.columns
+        label for="setting_server_admin" Server Admin Email
+        input type="email" id="setting_server_admin" name="setting[server_admin]" value="#{Setting.get('server_admin')}"
 
-  tbody
-    - @settings.each do |setting|
-      tr
-        td = setting.name
-        td = setting.casted_value
-        td = setting.stype
-        td
-          = link_to icon_text('pencil', 'Edit'), edit_setting_path(setting), class: 'button tiny'
-          = link_to icon_text('trash', 'Destroy'), setting, data: {:confirm => 'Are you sure?'}, :method => :delete,  class: 'button tiny alert'
+
+  fieldset
+    legend User SSH Settings
+
+    .row
+      .large-6.columns
+        label for="setting_default_user_shell" Default User Shell
+        input type="text" id="setting_default_user_shell" name="setting[default_user_shell]" value="#{Setting.get('default_user_shell')}"
+
+        
+  fieldset
+    legend Debug
+
+    .row
+      .large-6.columns
+        - if Setting.get('debug', false)
+          input type="checkbox" id="setting_debug" name="setting[debug]" value="1" checked="checked"
+        - else 
+          input type="checkbox" id="setting_debug" name="setting[debug]" value="1"
+        label for="setting_debug" Set Panel in Debug Mode
+
+  .actions
+    = submit_tag 'Save', class: 'button small'

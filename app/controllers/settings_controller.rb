@@ -2,76 +2,78 @@ class SettingsController < ApplicationController
   layout 'left-column'
   before_action :authenticate_user!
   before_action :require_admin!
-  before_action :set_setting, only: [:show, :edit, :update, :destroy]
+
+
+  FAILED_SAVE_MSG = 'Unable to save settings'
 
   # GET /settings
   # GET /settings.json
   def index
-    @settings = Setting.all
   end
 
-  # GET /settings/1
-  # GET /settings/1.json
-  def show
-  end
-
-  # GET /settings/new
-  def new
-    @setting = Setting.new
-  end
-
-  # GET /settings/1/edit
-  def edit
-  end
-
-  # POST /settings
-  # POST /settings.json
-  def create
-    @setting = Setting.new(setting_params)
-
-    respond_to do |format|
-      if @setting.save
-        format.html { redirect_to settings_url, notice: 'Setting was successfully created.' }
-        format.json { render :show, status: :created, location: @setting }
-      else
-        format.html { render :new }
-        format.json { render json: @setting.errors, status: :unprocessable_entity }
-      end
-    end
-  end
 
   # PATCH/PUT /settings/1
   # PATCH/PUT /settings/1.json
   def update
+    if !valid_settings_params?
+      flash[:error] = 'Encountered some suspicious data'
+      return render :index 
+    end
+
     respond_to do |format|
-      if @setting.update(setting_params)
-        format.html { redirect_to settings_url, notice: 'Setting was successfully updated.' }
-        format.json { render :show, status: :ok, location: @setting }
-      else
-        format.html { render :edit }
-        format.json { render json: @setting.errors, status: :unprocessable_entity }
+      begin
+        ActiveRecord::Base.transaction do
+          settings_params.each do |setting_params|
+            name = setting_params.shift
+
+            setting = Setting.where(name: name).first_or_initialize
+            setting.var_type = permitted_settings[name.to_sym] if setting.new_record?
+            setting.value = setting_params.shift
+
+            # setting.update(value: settings_params.shift)
+            # setting = Setting.new(name: name, value: setting_params.shift, var_type: permitted_settings[name.to_sym])
+
+            setting.save!
+          end
+        end
+      rescue ActiveRecord::RecordInvalid => invalid
+        flash[:error] = FAILED_SAVE_MSG
+        
+        format.html { render :index }
+        format.json { render json: FAILED_SAVE_MSG, status: :unprocessable_entity }
       end
+
+      Setting.update_cache
+      format.html { redirect_to settings_url, notice: 'Setting was successfully updated.' }
+      format.json { render :index, status: :ok, location: settings_url }
     end
   end
 
-  # DELETE /settings/1
-  # DELETE /settings/1.json
-  def destroy
-    @setting.destroy
-    respond_to do |format|
-      format.html { redirect_to settings_url, notice: 'Setting was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_setting
-      @setting = Setting.find(params[:id])
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def valid_settings_params?
+      logger.debug permitted_settings.keys - settings_params.keys
+      return false if (permitted_settings.keys - settings_params.keys).count > 0
+      true
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def setting_params
-      params.require(:setting).permit(:name, :value, :var_type)
+    def settings_params
+      parameters = params.require(:setting).inject({}){ |memo,(k,v)| memo[k.to_sym] = v; memo }
+
+      if !parameters.has_key? :debug
+        parameters[:debug] = false
+      end
+
+      parameters
+    end
+
+    def permitted_settings
+      {
+        virtual_hosts_path: Setting::STRING_TYPE,
+        default_user_shell: Setting::STRING_TYPE,
+        server_admin: Setting::STRING_TYPE,
+        debug: Setting::BOOL_TYPE
+      }
     end
 end

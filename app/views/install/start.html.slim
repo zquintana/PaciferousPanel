@@ -1,0 +1,53 @@
+
+.panel.radius
+	h2 Install
+
+	= form_tag(install_start_path, method: 'POST') do 
+		fieldset
+			legend Admin User
+
+			- if @user.errors.any?
+  				.error_explanation
+    				strong= pluralize(@user.errors.count, "error") + " prohibited this user from being saved:"
+ 
+    				ul
+    					- @user.errors.full_messages.each do |msg|
+      						li= msg
+
+			.row
+		  		.large-12.columns
+		  			= label :user, :email
+		  			= text_field :user, :email, autofocus: true
+
+		  	.row
+		  		.large-12.columns
+		  			= label :user, :password
+		  			= password_field :user, :password
+
+		  	.row
+		  		.large-12.columns
+		  			= label :user, :password_confirmation
+		  			= password_field :user, :password_confirmation
+
+
+		fieldset
+			legend Server Configurations
+	  	
+		  	.row
+		  		.large-12.columns
+		  			label for="setting_virtual_hosts_path" Virtual Hosts Path
+		  			input type="text" id="setting_virtual_hosts_path" name="setting[virtual_hosts_path]" value="/etc/apache2/sites-available"
+
+		  	.row
+		  		.large-12.columns
+		  			label for="setting_default_user_shell" Default User Shell
+		  			input type="text" id="setting_default_user_shell" name="setting[default_user_shell]" value="/bin/rbash"
+
+		    .row
+		  		.large-12.columns
+		  			label for="setting_server_admin" Server Admin Email
+		  			input type="email" id="setting_server_admin" name="setting[server_admin]"
+
+	  	.row
+	  		.large-12.columns
+	  			= submit_tag "Install", class: 'button small'

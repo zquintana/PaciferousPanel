@@ -1,5 +1,6 @@
 form {
-	#error_explanation {
+	#error_explanation, .error_explanation {
+		margin-bottom: 15px;
 		ul {
 			margin-bottom: 0;
 			font-size: 1em;

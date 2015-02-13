@@ -13,11 +13,19 @@ Rails.application.routes.draw do
 
   resources :users
 
-  resources :settings
+  get 'settings' => 'settings#index'
+  put 'settings' => 'settings#update'
+
+  # Add install routes
+  if Setting.get('installed', false) == false
+    get 'install/start' => 'install#start'
+    post 'install/start' => 'install#install'
+  end
 
   root 'domains#index'
 
   devise_for :users, :path => '', :skip => [:sessions]
+
   as :user do
     get 'sign-in' => 'devise/sessions#new', :as => :new_user_session
     post 'sign-in' => 'devise/sessions#create', :as => :user_session

@@ -23,7 +23,11 @@ set :deploy_to, '/home/zach/www/panel.vectorw3b.com'
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, %w{config/database.yml}
+set :linked_files, %w{
+  config/database.yml
+  config/initializers/devise.rb
+  config/secrets.yml
+}
 
 # Default value for linked_dirs is []
 # set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
@@ -40,13 +44,33 @@ set :rbenv_ruby, '2.1.1'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
 set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
+set :rails_env, "production"
+
 namespace :deploy do
 
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      # execute :touch, release_path.join('tmp/restart.txt')
+      execute :touch, release_path.join('tmp/restart.txt')
+    end
+  end
+
+  desc 'Start application via passenger'
+  task :start do
+    on roles(:app) do
+      within current_path do
+        execute :passenger, "start --daemonize --port 8080 --environment production"
+      end
+    end
+  end
+
+  desc 'Stop passenger'
+  task :stop do
+    on roles(:app) do
+      within current_path do
+        execute  :passenger, "stop  --port 8080"
+      end
     end
   end
 
@@ -61,12 +85,4 @@ namespace :deploy do
     end
   end
 
-
-  desc "Symlink shared configs and folders on each release."
-  task :symlink_shared do
-    run "ln -nfs #{shared_path}/config/initializers/devise.rb #{release_path}/config/initializers/devise.rb"
-    run "ln -nfs #{shared_path}/config/secrets.yml #{release_path}/config/secrets.yml"
-  end
-  after 'deploy:finishing', 'deploy:symlink_shared'
-  
 end

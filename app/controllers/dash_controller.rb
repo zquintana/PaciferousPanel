@@ -1,6 +1,7 @@
 class DashController < ApplicationController
-  before_action :authenticate_user!
-  layout "left-column"
+	before_action :require_installed!
+  	before_action :authenticate_user!
+  	layout "left-column"
 
   def index
   	@domains = current_user.is_admin? ? Domain.all : current_user.domains.all
