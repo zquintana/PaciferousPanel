@@ -22,6 +22,7 @@ module PaciferousPanel
 
     config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 
+    config.assets.paths << Rails.root.join("app", "assets", "fonts")
     # config.assets.paths << Rails.root.join('vendor', 'assets', 'components')
 
     config.to_prepare do
