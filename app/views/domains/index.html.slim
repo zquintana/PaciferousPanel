@@ -40,6 +40,6 @@ h1
           ul.stack.button-group
             / li = link_to fa_icon('edit', 'Select'), domain_dash_path(domain.id), class: 'button tiny'
             li = link_to raw('<span class="fi-wrench"></span>Edit'), edit_domain_path(domain), class: "button tiny"
-            li = link_to fa_icon('envelope', 'Email'), domain_emails_path(domain), class: 'button tiny'
+            li = link_to fa_icon('envelope', text: 'Email'), domain_emails_path(domain), class: 'button tiny'
             li = link_to raw('<span class="fi-trash"></span>Destroy'), domain, data: {:confirm => 'Are you sure?'}, :method => :delete, class: "button tiny alert"
 

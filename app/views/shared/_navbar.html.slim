@@ -13,5 +13,5 @@
 						ul.dropdown
 							li= link_to raw('<span class="fi-map"></span>IPs'), ips_path
 							li= link_to raw('<span class="fi-torsos-all"></span>Users'), users_path
-							li= link_to fa_icon('cogs', 'Settings'), settings_path
+							li= link_to fa_icon('cogs', text: 'Settings'), settings_path
 				li= link_to 'Sign Out', destroy_user_session_path, :method => :delete

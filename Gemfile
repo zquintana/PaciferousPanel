@@ -50,6 +50,8 @@ gem "slim-rails"
 
 gem 'foundation-rails'
 
+gem "font-awesome-rails"
+
 group :development do
 	gem 'capistrano', '~> 3.1.0'
 
