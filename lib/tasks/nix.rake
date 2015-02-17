@@ -5,7 +5,7 @@ namespace :nix do
 		users = User.all_pending
 
 		users.each do |user|
-			puts "User #{user.email} -> #{user.unix_alias}\n"
+			user.create_unix_user
 		end
 	end
 end

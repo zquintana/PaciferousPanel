@@ -65,5 +65,10 @@ class User < ActiveRecord::Base
       command += " #{self.unix_alias}"
 
       `#{command}`
+
+      if $?.success? == false
+        write_attribute(:status, 1)
+        return self.save
+      end
     end
 end

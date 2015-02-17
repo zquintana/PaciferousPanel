@@ -54,6 +54,8 @@ gem "font-awesome-rails"
 
 gem 'random_password_generator', '~> 1.0.0'
 
+gem 'whenever', :require => false
+
 group :development do
 	gem 'capistrano', '~> 3.1.0'
 
