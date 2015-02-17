@@ -11,10 +11,10 @@
       .field
         = f.label :email
         = f.text_field :email
-    .large-6.columns
-      .field 
-        = f.label :alias
-        = f.text_field :alias
+    /.large-6.columns
+    /  .field 
+    /    = f.label :alias
+    /    = f.text_field :alias
   .row
     .large-6.columns
       .field
@@ -28,6 +28,10 @@
   .field
     = f.check_box :is_admin
     = f.label :is_admin
+
+  .field
+    input type="checkbox" name="generate_password" value="1" id="generate_password"
+    label for="generate_password" Generate password
 
   .actions 
     = f.button fa_icon('save', text: 'Save'), class: 'button', type: 'submit'

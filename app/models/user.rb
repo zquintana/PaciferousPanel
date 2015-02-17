@@ -28,6 +28,11 @@ class User < ActiveRecord::Base
     "client#{id}"
   end
 
+  def generate_password
+    self.password = RandomPasswordGenerator.generate(12, :skip_symbols => true)
+    self.password_confirmation = self.password
+  end
+
   class << self
     def StatusTypes
       @@StatusTypes
