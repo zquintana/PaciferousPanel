@@ -34,6 +34,9 @@ set :linked_files, %w{
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :default_env, {
+  secret_key_base: '3c315dfe70535b887f875ab45f3d447d7ff98700c1a79cc085e0e11a192851f98f095bf4666e1e6cb7541adb94c4622a48aa3de9ba39f61d9a70a9f5b993b6fe'
+}
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
@@ -42,19 +45,19 @@ set :linked_files, %w{
 set :rbenv_type, :user
 set :rbenv_ruby, '2.1.1'
 set :rbenv_prefix, "RBENV_ROOT=#{fetch(:rbenv_path)} RBENV_VERSION=#{fetch(:rbenv_ruby)} #{fetch(:rbenv_path)}/bin/rbenv exec"
-set :rbenv_map_bins, %w{rake gem bundle ruby rails}
+set :rbenv_map_bins, %w{rake gem bundle ruby rails passenger}
 
 set :rails_env, "production"
 
 namespace :deploy do
 
-  desc 'Restart application'
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
+  #desc 'Restart application'
+  #task :restart do
+  #  on roles(:app), in: :sequence, wait: 5 do
       # Your restart mechanism here, for example:
-      execute :touch, release_path.join('tmp/restart.txt')
-    end
-  end
+  #    execute :touch, release_path.join('tmp/restart.txt')
+  #  end
+  #end
 
   desc 'Start application via passenger'
   task :start do
@@ -69,7 +72,7 @@ namespace :deploy do
   task :stop do
     on roles(:app) do
       within current_path do
-        execute  :passenger, "stop --port 8080"
+        execute  :passenger, "stop  --port 8080"
       end
     end
   end
@@ -79,10 +82,12 @@ namespace :deploy do
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
+      within release_path do
+        execute :rake, 'cache:clear'
+      end
     end
   end
+
+
 
 end

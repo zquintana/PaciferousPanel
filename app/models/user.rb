@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
         return self.save
       end
 
-      command = "useradd -m"
+      command = "useradd -m --disabled-password"
       command += " -s #{default_shell}" if default_shell
       command += " #{self.unix_alias}"
 
