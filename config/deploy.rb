@@ -80,7 +80,7 @@ namespace :deploy do
   after :published, :whenever_root do
     on roles(:all) do 
       within release_path do
-        execute :sudo, 'bundle exec whenever -f config/root_schedule.rb -u root'
+        execute :sudo, 'bundle exec whenever -w config/root_schedule.rb -u root'
       end
     end
   end
