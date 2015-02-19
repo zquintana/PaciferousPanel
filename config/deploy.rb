@@ -27,6 +27,7 @@ set :linked_files, %w{
   config/database.yml
   config/initializers/devise.rb
   config/secrets.yml
+  lib/tasks/nix.rake
 }
 
 # Default value for linked_dirs is []
