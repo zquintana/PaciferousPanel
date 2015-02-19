@@ -77,13 +77,18 @@ namespace :deploy do
     end
   end
 
-  after :published, :whenever_root do
+
+  desc 'Add root scheduled tasks'
+  task :root_schedules do
+    # ask(:sudo_password, nil)
     on roles(:all) do 
       within release_path do
-        execute :sudo, 'bundle exec whenever -w config/root_schedule.rb -u root'
+        execute :sudo, :bundle, 'exec whenever -w config/root_schedule.rb -u root'
       end
     end
   end
+
+  after :published, :root_schedules
 
   after :publishing, :restart
 
