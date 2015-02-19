@@ -83,7 +83,8 @@ namespace :deploy do
     # ask(:sudo_password, nil)
     on roles(:all) do 
       within release_path do
-        execute :sudo, :bundle, 'exec whenever -w config/root_schedule.rb -u root'
+        # rbenv sudo bundle exec whenever -w config/root_schedule.rb -u root
+        execute :rbenv, 'sudo bundle exec whenever -w config/root_schedule.rb -u root'
       end
     end
   end
