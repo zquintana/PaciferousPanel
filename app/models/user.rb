@@ -4,8 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, 
          :confirmable, :lockable, :timeoutable
-  after_create :create_unix_user
-  # before_create :before_create_set_pending
+  # after_create :create_unix_user
+  before_create :before_create_set_pending
 
 
   has_many :domains
@@ -47,28 +47,29 @@ class User < ActiveRecord::Base
     end
   end
 
+  def create_unix_user
+    default_shell = Setting.get('default_shell')
+    debug = Setting.get('debug')
+    if debug == true
+      write_attribute(:status, 1)
+      return self.save
+    end
+
+    command = "adduser -m --disabled-password"
+    command += " -s #{default_shell}" if default_shell
+    command += " #{self.unix_alias}"
+    `#{command}`
+
+    if $?.success? == false
+      write_attribute(:status, 1)
+      return self.save
+    end
+  end
+
   protected
     def before_create_set_pending
       write_attribute(:status, 1)
     end
 
-    def create_unix_user
-      default_shell = Setting.get('default_shell')
-      debug = Setting.get('debug')
-      if debug == true
-        write_attribute(:status, 1)
-        return self.save
-      end
-
-      command = "useradd -m --disabled-password"
-      command += " -s #{default_shell}" if default_shell
-      command += " #{self.unix_alias}"
-
-      `#{command}`
-
-      if $?.success? == false
-        write_attribute(:status, 1)
-        return self.save
-      end
-    end
+    
 end

@@ -20,7 +20,7 @@ set :deploy_to, '/home/zach/www/panel.vectorw3b.com'
 # set :log_level, :debug
 
 # Default value for :pty is false
-# set :pty, true
+set :pty, true
 
 # Default value for :linked_files is []
 set :linked_files, %w{
@@ -77,16 +77,24 @@ namespace :deploy do
     end
   end
 
-  after :publishing, :restart
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
+  after :published, :whenever_root do
+    on roles(:all) do 
       within release_path do
-        execute :rake, 'cache:clear'
+        execute :sudo, 'bundle exec whenever -f config/root_schedule.rb -u root'
       end
     end
   end
+
+  after :publishing, :restart
+
+  #after :restart, :clear_cache do
+  #  on roles(:web), in: :groups, limit: 3, wait: 10 do
+      # Here we can do anything such as:
+  #    within release_path do
+  #      execute :rake, 'cache:clear'
+  #    end
+  #  end
+  #end
 
 
 
