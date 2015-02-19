@@ -79,16 +79,16 @@ namespace :deploy do
   end
 
 
-  #desc 'Add root scheduled tasks'
-  #task :root_schedules do
+  desc 'Add root scheduled tasks'
+  task :root_schedules do
     # ask(:sudo_password, nil)
-  #  on roles(:all) do 
-  #    within release_path do
+    on roles(:all) do 
+      within release_path do
         # rbenv sudo bundle exec whenever -w config/root_schedule.rb -u root
-  #      execute :rbenv, 'sudo bundle exec whenever -w config/root_schedule.rb -u root'
-  #    end
-  #  end
-  #end
+        execute :rbenv, "sudo bundle exec whenever --set 'path=#{current_path}' -f config/root_schedule.rb -u root -w"
+      end
+    end
+  end
 
   #after :published, :root_schedules
 
@@ -103,6 +103,5 @@ namespace :deploy do
   #  end
   #end
 
-
-
+  before :finishing, 'linked_files:upload'
 end

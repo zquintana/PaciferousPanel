@@ -69,6 +69,8 @@ group :development do
 	gem 'capistrano-rbenv', "~> 2.0" 
 
 	gem 'capistrano-passenger'
+
+	gem 'capistrano-linked-files'
 end
 
 group :production do

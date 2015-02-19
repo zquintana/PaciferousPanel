@@ -51,7 +51,7 @@ class User < ActiveRecord::Base
     default_shell = Setting.get('default_shell')
     debug = Setting.get('debug')
     if debug == true
-      write_attribute(:status, 1)
+      write_attribute(:status, @@PendingStatusType)
       return self.save
     end
 
@@ -61,9 +61,12 @@ class User < ActiveRecord::Base
     `#{command}`
 
     if $?.success? == false
-      write_attribute(:status, 1)
+      write_attribute(:status, @@PendingStatusType)
       return self.save
     end
+
+    write_attribute(:status, @@EnabledStatusType)
+    self.save
   end
 
   protected
