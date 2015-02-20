@@ -17,8 +17,9 @@ class User < ActiveRecord::Base
     :enabled => 2
   }
 
-  @@PendingStatusType = 1
-  @@EnabledStatusType = 2
+  @@DisabledStatusType  = 0
+  @@PendingStatusType   = 1
+  @@EnabledStatusType   = 2
 
   def is_admin?
   	read_attribute(:is_admin) == true
@@ -45,28 +46,14 @@ class User < ActiveRecord::Base
     def EnabledStatusType
       @@EnabledStatusType
     end
-  end
 
-  def create_unix_user
-    default_shell = Setting.get('default_shell')
-    debug = Setting.get('debug')
-    if debug == true
-      write_attribute(:status, @@PendingStatusType)
-      return self.save
+    def PendingStatusType
+      @@PendingStatusType
     end
 
-    command = "adduser -m --disabled-password"
-    command += " -s #{default_shell}" if default_shell
-    command += " #{self.unix_alias}"
-    `#{command}`
-
-    if $?.success? == false
-      write_attribute(:status, @@PendingStatusType)
-      return self.save
+    def DisabledStatusType
+      @@DisabledStatusType
     end
-
-    write_attribute(:status, @@EnabledStatusType)
-    self.save
   end
 
   protected

@@ -35,9 +35,9 @@ set :linked_files, %w{
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
-set :default_env, {
-  secret_key_base: '3c315dfe70535b887f875ab45f3d447d7ff98700c1a79cc085e0e11a192851f98f095bf4666e1e6cb7541adb94c4622a48aa3de9ba39f61d9a70a9f5b993b6fe'
-}
+# set :default_env, {
+#   secret_key_base: '3c315dfe70535b887f875ab45f3d447d7ff98700c1a79cc085e0e11a192851f98f095bf4666e1e6cb7541adb94c4622a48aa3de9ba39f61d9a70a9f5b993b6fe'
+# }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
@@ -73,7 +73,11 @@ namespace :deploy do
   task :stop do
     on roles(:app) do
       within current_path do
-        execute  :passenger, "stop  --port 8080"
+        begin
+          execute  :passenger, "stop  --port 8080"
+        rescue SSHKit::StandardError
+          puts 'Passenger not running'
+        end
       end
     end
   end
@@ -104,4 +108,6 @@ namespace :deploy do
   #end
 
   before :finishing, 'linked_files:upload'
+  before :starting, :stop
+  after :published, :start
 end
