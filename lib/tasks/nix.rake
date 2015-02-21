@@ -1,4 +1,4 @@
-
+require 'system'
 
 def create_unix_user(user, default_shell, debug)
     if debug == true
@@ -29,8 +29,16 @@ namespace :nix do
 
 		User.transaction do
 			users.each do |user|
-				create_unix_user(user, default_shell, debug)
+				return if System.uexists? user.unix_alias
+				
+				create_unix_user(user, default_shell, debug)				
 			end
 		end
 	end
+
+	# desc "Test user"
+	# task :test => :environment do
+	#	puts System.uexists? 'zach'
+	#	puts System.uexists? 'zach2'
+	# end
 end
