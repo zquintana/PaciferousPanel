@@ -29,9 +29,12 @@ namespace :nix do
 
 		User.transaction do
 			users.each do |user|
-				return if System.uexists? user.unix_alias
-				
-				create_unix_user(user, default_shell, debug)				
+				puts "Creating user for #{user.id}"
+				if !System.uexists? user.unix_alias
+					create_unix_user(user, default_shell, debug)
+				else
+					puts "User already exists for #{user.unix_alias}"
+				end
 			end
 		end
 	end
