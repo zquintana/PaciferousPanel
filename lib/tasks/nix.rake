@@ -27,14 +27,15 @@ namespace :nix do
 		default_shell = Setting.get('default_shell')
     	debug = Setting.get('debug')
 
-		User.transaction do
-			users.each do |user|
-				puts "Creating user for #{user.id}"
-				if !System.uexists? user.unix_alias
-					create_unix_user(user, default_shell, debug)
-				else
-					puts "User already exists for #{user.unix_alias}"
-				end
+		
+		users.each do |user|
+			puts "Creating user for #{user.id}"
+			if !System.uexists? user.unix_alias
+				create_unix_user(user, default_shell, debug)
+			else
+				puts "User already exists for #{user.unix_alias}"
+				user.status = User.EnabledStatusType
+				user.save
 			end
 		end
 	end
