@@ -5,6 +5,7 @@ TPL_DIR = "#{Rails.root}/lib/tpls"
 def render(fname, context)
   tpl = Erubis::Eruby.new(File.read(File.join(TPL_DIR, "#{fname}.eruby")))
   tpl.evaluate(context)
+end
 
 namespace :host do
 	desc "Add pending vhosts to sites-available and reset apache"
