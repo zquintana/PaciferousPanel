@@ -1,16 +1,16 @@
-<VirtualHost <%= @ip %>:80>
+<VirtualHost <%= @domain.ip.address %>:80>
   # Admin email, Server Name (domain name), and any aliases
   ServerAdmin <%= @server_admin %>
-  ServerName  <%= @server_name %>
-  <% if @server_alias %>
-  ServerAlias <%= @server_alias %>
+  ServerName  <%= @domain.name %>
+  <% if @domain.alias %>
+  ServerAlias <%= @domain.alias %>
   <% end %>
 
 
   # Index file and Document Root (where the www files are located)
   DirectoryIndex index.html index.php
-  DocumentRoot <%= @vhost_root %>/<%= @server_name %>/public
-  <Directory <%= @vhost_root %>/<%= @server_name %>/public>
+  DocumentRoot <%= @domain.host_path %>/public
+  <Directory <%= @domain.host_path %>/public>
     Options Indexes FollowSymLinks MultiViews
     AllowOverride All
     Require all granted
@@ -19,7 +19,7 @@
 
   # Log file locations
   LogLevel warn
-  ErrorLog  <%= @vhost_root %>/<%= @server_name %>/log/error.log
-  CustomLog <%= @vhost_root %>/<%= @server_name %>/log/access.log combined
-  php_value error_log <%= @vhost_root %>/<%= @server_name %>/log/error.log
+  ErrorLog  <%= @domain.host_path %>/log/error.log
+  CustomLog <%= @domain.host_path %>/log/access.log combined
+  php_value error_log <%= @domain.host_path %>/log/error.log
 </VirtualHost>

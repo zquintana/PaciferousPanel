@@ -5,7 +5,6 @@ TPL_DIR = "#{Rails.root}/lib/tpls"
 def render(fname, context)
   tpl = Erubis::Eruby.new(File.read(File.join(TPL_DIR, "#{fname}.eruby")))
   tpl.evaluate(context)
-end
 
 namespace :host do
 	desc "Add pending vhosts to sites-available and reset apache"
@@ -22,11 +21,8 @@ namespace :host do
     vhost_root = Setting.get('virtual_hosts_path')
     def create_context(domain, vhost_root)
       {
-        ip: domain.ip.address,
-        vhost_root: vhost_root,
         server_admin: Setting.get('server_admin'),
-        server_name: domain.name,
-        server_alias: domain.alias ? domain.alias : nil
+        domain: domain
       }
     end
 
@@ -36,6 +32,11 @@ namespace :host do
         puts "Updating #{domain.name}"
         conf_path = File.join(vhost_root, "#{domain.name}.conf")
         
+        mkdir_p "#{domain.host_path}/public"
+        mkdir_p "#{domain.host_path}/log"
+        chown_R domain.user.unix_alias, domain.user.unix_alias, "#{domain.host_path}"
+        chmod_R 0744, "#{domain.host_path}"
+
         File.open conf_path, 'w' do |file|
           file.write render('vhost', create_context(domain, vhost_root))
         end

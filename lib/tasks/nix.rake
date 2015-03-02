@@ -37,6 +37,15 @@ namespace :nix do
 				user.status = User.EnabledStatusType
 				user.save
 			end
+
+			mkdir_p "#{user.home_path}/.ssh"
+			touch "#{user.home_path}/.ssh/authorized_keys"
+			chmod 700, "#{user.home_path}/.ssh"
+			chmod 600, "#{user.home_path}/.ssh/authorized_keys"
+			chown_R 'www-data', 'www-data', "#{user.home_path}/.ssh"
+
+			mkdir_p "#{user.home_path}/www"
+			chown_R user.unix_alias, user.unix_alias, "#{user.home_path}/www"
 		end
 	end
 

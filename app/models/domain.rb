@@ -20,6 +20,10 @@ class Domain < ActiveRecord::Base
 		'disabled'
 	end
 
+	def host_path
+		"#{self.user.home_path}/www/#{self.name}"
+	end
+
 	class << self
 		def StatusTypes
 			@@StatusTypes

@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
 
   has_many :domains
+  has_many :ssk_keys
   has_one :profile
 
   @@StatusTypes = {
@@ -27,6 +28,10 @@ class User < ActiveRecord::Base
 
   def unix_alias
     "client#{id}"
+  end
+
+  def home_path
+    "/home/#{user.unix_alias}"
   end
 
   def generate_password
