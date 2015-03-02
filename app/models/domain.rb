@@ -21,7 +21,7 @@ class Domain < ActiveRecord::Base
 	end
 
 	def host_path
-		"#{self.user.home_path}/www/#{self.name}"
+		"#{user.home_path}/www/#{name}"
 	end
 
 	class << self

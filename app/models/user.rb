@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   end
 
   def home_path
-    "/home/#{user.unix_alias}"
+    "/home/#{unix_alias}"
   end
 
   def generate_password
