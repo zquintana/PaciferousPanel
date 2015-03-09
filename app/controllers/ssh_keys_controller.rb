@@ -6,7 +6,7 @@ class SshKeysController < ApplicationController
   # GET /ssh_keys
   # GET /ssh_keys.json
   def index
-    @ssh_keys = SshKey.all
+    @ssh_keys = current_user.ssh_keys.all
   end
 
   # GET /ssh_keys/1
@@ -16,7 +16,7 @@ class SshKeysController < ApplicationController
 
   # GET /ssh_keys/new
   def new
-    @ssh_key = SshKey.new
+    @ssh_key = current_user.ssh_keys.new
   end
 
   # GET /ssh_keys/1/edit
@@ -26,7 +26,7 @@ class SshKeysController < ApplicationController
   # POST /ssh_keys
   # POST /ssh_keys.json
   def create
-    @ssh_key = SshKey.new(ssh_key_params)
+    @ssh_key = current_user.ssh_keys.new(ssh_key_params)
 
     respond_to do |format|
       if @ssh_key.save
@@ -66,7 +66,7 @@ class SshKeysController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ssh_key
-      @ssh_key = SshKey.find(params[:id])
+      @ssh_key = current_user.is_admin? ? SshKey.find(params[:id]) : current_user.ssh_keys.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -9,6 +9,6 @@ class SshKey < ActiveRecord::Base
 
 	protected
 	def generate_allowed
-		AuthorizedKeys.generate(self.user)
+		AuthorizedKeys.generate(user)
 	end
 end
