@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
 
 
   has_many :domains
-  has_many :ssk_keys
+  has_many :ssh_keys
   has_one :profile
 
   @@StatusTypes = {
