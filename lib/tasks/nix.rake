@@ -45,9 +45,9 @@ end
 namespace :nix do
 	desc "Process pending users"
 	task :process_users => :environment do
-		users = User.all_pending
-		default_shell = Setting.get('default_shell')
-    	debug = Setting.get('debug')
+		users 			= User.all_pending
+		default_shell 	= Setting.get('default_shell')
+    	debug 		= Setting.get('debug')
     	server_user = ServerInfo.config.user
 		
 		users.each do |user|
@@ -62,9 +62,9 @@ namespace :nix do
 
 			mkdir_p "#{user.home_path}/.ssh"
 			touch "#{user.home_path}/.ssh/authorized_keys"
-			chmod 0700, "#{user.home_path}/.ssh"
-			chmod 0600, "#{user.home_path}/.ssh/authorized_keys"
-			chown_R server_user, server_user, "#{user.home_path}/.ssh"
+			chmod 0770, "#{user.home_path}/.ssh"
+			chmod 0660, "#{user.home_path}/.ssh/authorized_keys"
+			chown_R user.unix_alias, server_user, "#{user.home_path}/.ssh"
 
 			mkdir_p "#{user.home_path}/www"
 			chown_R user.unix_alias, user.unix_alias, "#{user.home_path}/www"
