@@ -77,7 +77,7 @@ namespace :nix do
 		ssh_key_cache = 'ssh_key_last_checked'
 
 		users = []
-		if Rails.cache.exists? ssh_key_cache
+		if Rails.cache.exist? ssh_key_cache
 			last_checked = Rails.cache.read ssh_key_cache
 			users 	= User.where(id: SshKey.select('user_id').where('created_at >= ? OR updated_at >= ?', last_checked, last_checked).distinct)
 		else
