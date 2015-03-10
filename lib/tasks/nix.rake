@@ -62,12 +62,39 @@ namespace :nix do
 
 			mkdir_p "#{user.home_path}/.ssh"
 			touch "#{user.home_path}/.ssh/authorized_keys"
-			chmod 0770, "#{user.home_path}/.ssh"
-			chmod 0660, "#{user.home_path}/.ssh/authorized_keys"
-			chown_R user.unix_alias, server_user, "#{user.home_path}/.ssh"
+			chmod 0700, "#{user.home_path}/.ssh"
+			chmod 0600, "#{user.home_path}/.ssh/authorized_keys"
+			chown_R user.unix_alias, user.unix_alias, "#{user.home_path}/.ssh"
 
 			mkdir_p "#{user.home_path}/www"
 			chown_R user.unix_alias, user.unix_alias, "#{user.home_path}/www"
+		end
+	end
+
+	desc "Process new ssh keys"
+	task :process_keys => :environment do 
+		ssh_key_cache = 'ssh_key_last_checked'
+
+		users = []
+		if Rails.cache.exists? ssh_key_cache
+			last_checked = Rails.cache.read ssh_key_cache
+			users 	= User.where(id: SshKey.select('user_id').where('created_at >= ? OR updated_at >= ?', last_checked, last_checked).distinct)
+		else
+			users 	= User.where(id: SshKey.select('user_id').distinct) 	
+		end
+
+		Rails.cache.write ssh_key_cache, Time.now
+		return if users.length < 1
+
+		users.each do |user|
+			f = "#{user.home_path}/.ssh/authorized_keys"
+			File.open f, 'w' do |f|
+				f.puts user.ssh_keys.all
+			end
+
+			chmod 0700, "#{user.home_path}/.ssh"
+			chmod 0600, "#{user.home_path}/.ssh/authorized_keys"
+			chown_R user.unix_alias, user.unix_alias, "#{user.home_path}/.ssh"
 		end
 	end
 
