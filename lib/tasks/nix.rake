@@ -21,11 +21,12 @@ def create_unix_user(user, default_shell, debug)
     user.save
 end
 
+'''
 class ServerInfo
 	include Capistrano::DSL
 
 	def initialize
-		load 'capistrano/defaults.rb'
+		load "capistrano/defaults.rb"
 		load stage_config_path.join("production.rb")
 		# load deploy_config_path
 		load "capistrano/#{fetch(:scm)}.rb"
@@ -41,6 +42,7 @@ class ServerInfo
 		info.primary :app
 	end
 end
+'''
 
 namespace :nix do
 	desc "Process pending users"
@@ -48,7 +50,6 @@ namespace :nix do
 		users 			= User.all_pending
 		default_shell 	= Setting.get('default_shell')
     	debug 		= Setting.get('debug')
-    	server_user = ServerInfo.config.user
 		
 		users.each do |user|
 			puts "Creating user for #{user.id}"
